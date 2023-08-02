@@ -7,6 +7,22 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.7;
 
+const background = new Sprite({
+  position: {
+    x: 0,
+    y: 0
+  },
+  imageSrc: './assets/background.png'
+})
+const shop = new Sprite({
+  position: {
+    x: 620,
+    y: 160
+  },
+  imageSrc: './assets/shop.png',
+  scale: 2.5,
+  framesMax: 6
+})
 const player = new Fighter({
   position: {
     x: 0,
@@ -18,9 +34,12 @@ const player = new Fighter({
   },
   color: 'yellow',
   offset: {
-    x: 0,
-    y: 0
-  }
+    x: 215,
+    y: 156
+  },
+  imageSrc: './assets/samuraiMack/Idle.png',
+  scale: 2.5,
+  framesMax: 8
 });
 
 const enemy = new Fighter({
@@ -59,30 +78,6 @@ const keys = {
   },
 }
 
-const determineWinner = ({player, enemy, timerId}) => {
-  clearTimeout(timerId);
-  document.querySelector('#message').style.display = 'flex'
-  if (player.health === enemy.health) {
-    document.querySelector('#message').innerHTML = 'Tie'
-  } else if (player.health > enemy.health) {
-    document.querySelector('#message').innerHTML = 'Player wins'
-  } else {
-    document.querySelector('#message').innerHTML = 'Enemy wins'
-  }
-}
-
-let timerId;
-let timer = 26;
-const decreaseTimer = () => {
-  if (timer > 0) {
-    timerId = setTimeout(decreaseTimer, 1000);
-    timer -= 1;
-    document.querySelector('#timer').innerHTML = timer
-  }
-  if (timer === 0){
-    determineWinner({player, enemy, timerId})
-  }
-}
 decreaseTimer();
 
 const rectangularCollision = ({rectangle1, rectangle2}) => {
@@ -95,8 +90,10 @@ const animate = () => {
   window.requestAnimationFrame(animate);
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
+  background.update();
+  shop.update();
   player.update();
-  enemy.update();
+  // enemy.update();
 
   //player movement
   player.velocity.x = 0;
